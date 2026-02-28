@@ -1,54 +1,57 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
-  <title>Ronny Peças</title>
+  <title>Ronny Peças - Sistema</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://unpkg.com/html5-qrcode"></script>
-  alert("login clicado");
 </head>
+
 <body>
 
-<div id="loginScreen" class="center">
-  <h1>Ronny Peças</h1>
-  <h2>Login</h2>
-  <input type="text" id="usuario" placeholder="Usuário">
-  <input type="password" id="senha" placeholder="Senha">
-  <button onclick="login()">Entrar</button>
-</div>
+  <!-- TELA DE LOGIN -->
+  <div id="login-screen" class="center">
+    <img src="logo.png" class="logo">
+    <h2>Acesso ao Sistema</h2>
 
-<div id="dashboard" class="hidden">
+    <input type="text" id="usuario" placeholder="Usuário">
+    <input type="password" id="senha" placeholder="Senha">
+    <button onclick="login()">Entrar</button>
+  </div>
 
-<header>
-  <h1>Painel</h1>
-  <button onclick="logout()">Sair</button>
-</header>
 
-<section>
-  <h2>Cadastrar Produto</h2>
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="hidden">
 
-  <input type="text" id="codigoBarras" placeholder="Código de Barras">
-  <button onclick="iniciarScanner()">Escanear</button>
+    <!-- TOPO -->
+    <div class="topo">
+      <img src="logo.png" class="logo">
+      <h1>Sistema de Estoque</h1>
+      <button onclick="logout()">Sair</button>
+    </div>
 
-  <input type="text" id="nomeProduto" placeholder="Nome">
-  <input type="number" id="quantidadeProduto" placeholder="Quantidade">
-  <input type="number" id="precoCompra" placeholder="Preço Compra">
-  <input type="number" id="precoVenda" placeholder="Preço Venda">
+    <!-- CADASTRO DE PRODUTO -->
+    <h2>Cadastrar Produto</h2>
 
-  <button onclick="cadastrarProduto()">Salvar Produto</button>
+    <input id="codigoBarras" placeholder="Código de Barras">
+    <button onclick="iniciarScanner()">Escanear Código</button>
+    <div id="scanner"></div>
 
-  <div id="scanner"></div>
-</section>
+    <input id="nomeProduto" placeholder="Nome do Produto">
+    <input id="quantidadeProduto" type="number" placeholder="Quantidade">
+    <input id="precoCompra" type="number" step="0.01" placeholder="Preço de Compra">
+    <input id="precoVenda" type="number" step="0.01" placeholder="Preço de Venda">
 
-<section>
-  <h2>Produtos</h2>
-  <div id="listaProdutos"></div>
-</section>
+    <button onclick="cadastrarProduto()">Cadastrar Produto</button>
 
-</div>
+    <!-- LISTA -->
+    <h2>Produtos em Estoque</h2>
+    <div id="listaProdutos"></div>
 
-<script type="module" src="script.js"></script>
+  </div>
+
+  <script type="module" src="script.js"></script>
+
 </body>
-
 </html>
-
