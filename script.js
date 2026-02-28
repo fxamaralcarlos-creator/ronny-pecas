@@ -12,28 +12,33 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const loginScreen = document.getElementById("loginScreen");
+
+// ELEMENTOS DO HTML
+const loginScreen = document.getElementById("login-screen");
 const dashboard = document.getElementById("dashboard");
+
 const usuario = document.getElementById("usuario");
 const senha = document.getElementById("senha");
-const listaProdutos = document.getElementById("listaProdutos");
+
 const codigoBarras = document.getElementById("codigoBarras");
 const nomeProduto = document.getElementById("nomeProduto");
 const quantidadeProduto = document.getElementById("quantidadeProduto");
 const precoCompra = document.getElementById("precoCompra");
 const precoVenda = document.getElementById("precoVenda");
 
+const listaProdutos = document.getElementById("listaProdutos");
+
 let usuarioLogado = null;
 
-// USUÁRIOS FIXOS (SEM FIRESTORE PRA LOGIN)
+// USUÁRIOS FIXOS
 const usuariosSistema = {
   "Paulo": "P@ul0#X79",
   "Ronny": "R0nnY!48k",
   "Carlos": "C4rL0s$92Q"
 };
 
-// LOGIN SEM EMAIL
-window.login = function() {
+// LOGIN
+window.login = function () {
 
   const user = usuario.value;
   const pass = senha.value;
@@ -56,40 +61,57 @@ window.login = function() {
   carregarProdutos();
 };
 
-window.logout = function() {
+// LOGOUT
+window.logout = function () {
   location.reload();
 };
 
-// SCANNER
-window.iniciarScanner = function() {
+// SCANNER PROFISSIONAL
+window.iniciarScanner = function () {
+
   const scanner = new Html5Qrcode("scanner");
 
   scanner.start(
     { facingMode: "environment" },
-    { fps: 10, qrbox: 250 },
+    {
+      fps: 15,
+      qrbox: { width: 250, height: 150 }
+    },
     (decodedText) => {
       codigoBarras.value = decodedText;
       scanner.stop();
       scanner.clear();
     }
-  );
+  ).catch(err => {
+    alert("Erro ao acessar câmera. Permita o uso da câmera no navegador.");
+    console.error(err);
+  });
 };
 
 // CADASTRAR PRODUTO
-window.cadastrarProduto = async function() {
+window.cadastrarProduto = async function () {
+
+  if (!codigoBarras.value || !nomeProduto.value) {
+    alert("Preencha os campos obrigatórios.");
+    return;
+  }
 
   await addDoc(collection(db, "produtos"), {
     codigo: codigoBarras.value,
     nome: nomeProduto.value,
     quantidade: Number(quantidadeProduto.value),
     precoCompra: Number(precoCompra.value),
-    precoVenda: Number(precoVenda.value)
+    precoVenda: Number(precoVenda.value),
+    criadoPor: usuarioLogado
   });
 
-  alert("Produto cadastrado");
+  alert("Produto cadastrado com sucesso!");
+
+  limparCampos();
   carregarProdutos();
 };
 
+// LISTAR PRODUTOS
 async function carregarProdutos() {
 
   listaProdutos.innerHTML = "";
@@ -99,8 +121,20 @@ async function carregarProdutos() {
   snapshot.forEach((docSnap) => {
     const p = docSnap.data();
 
+    const lucro = (p.precoVenda - p.precoCompra).toFixed(2);
+
     const div = document.createElement("div");
-    div.innerHTML = `${p.nome} - ${p.quantidade} unidades`;
+    div.classList.add("produto");
+
+    div.innerHTML = `
+      <strong>${p.nome}</strong><br>
+      Código: ${p.codigo}<br>
+      Quantidade: ${p.quantidade}<br>
+      Compra: R$ ${p.precoCompra}<br>
+      Venda: R$ ${p.precoVenda}<br>
+      Lucro Unitário: R$ ${lucro}<br>
+      Cadastrado por: ${p.criadoPor}
+    `;
 
     if (p.quantidade < 5) {
       div.classList.add("baixo");
@@ -108,5 +142,13 @@ async function carregarProdutos() {
 
     listaProdutos.appendChild(div);
   });
+}
 
+// LIMPAR CAMPOS
+function limparCampos() {
+  codigoBarras.value = "";
+  nomeProduto.value = "";
+  quantidadeProduto.value = "";
+  precoCompra.value = "";
+  precoVenda.value = "";
 }
