@@ -12,6 +12,16 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const loginScreen = document.getElementById("loginScreen");
+const dashboard = document.getElementById("dashboard");
+const usuario = document.getElementById("usuario");
+const senha = document.getElementById("senha");
+const listaProdutos = document.getElementById("listaProdutos");
+const codigoBarras = document.getElementById("codigoBarras");
+const nomeProduto = document.getElementById("nomeProduto");
+const quantidadeProduto = document.getElementById("quantidadeProduto");
+const precoCompra = document.getElementById("precoCompra");
+const precoVenda = document.getElementById("precoVenda");
 
 let usuarioLogado = null;
 
@@ -98,4 +108,5 @@ async function carregarProdutos() {
 
     listaProdutos.appendChild(div);
   });
+
 }
