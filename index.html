@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Ronny Peças</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+
+<div id="login-screen" class="center">
+  <h1>Ronny Peças</h1>
+  <h2>Login</h2>
+  <input type="text" id="usuario" placeholder="Usuário">
+  <input type="password" id="senha" placeholder="Senha">
+  <button onclick="login()">Entrar</button>
+</div>
+
+<div id="dashboard" class="hidden">
+
+<header>
+  <h1>Painel</h1>
+  <button onclick="logout()">Sair</button>
+</header>
+
+<section>
+  <h2>Cadastrar Produto</h2>
+
+  <input type="text" id="codigoBarras" placeholder="Código de Barras">
+  <button onclick="iniciarScanner()">Escanear</button>
+
+  <input type="text" id="nomeProduto" placeholder="Nome">
+  <input type="number" id="quantidadeProduto" placeholder="Quantidade">
+  <input type="number" id="precoCompra" placeholder="Preço Compra">
+  <input type="number" id="precoVenda" placeholder="Preço Venda">
+
+  <button onclick="cadastrarProduto()">Salvar Produto</button>
+
+  <div id="scanner"></div>
+</section>
+
+<section>
+  <h2>Produtos</h2>
+  <div id="listaProdutos"></div>
+</section>
+
+</div>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
